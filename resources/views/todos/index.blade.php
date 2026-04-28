@@ -1,8 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Todo一覧')
+@section('title', 'Todo一覧ページ')
 
 @section('content')
+<nav>
+    <a href="{{ route('todos.index') }}">一覧</a>
+    <a href="{{ route('todos.create') }}">新規作成</a>
+</nav>
 <!-- 検索欄 -->
 <div>
     <form action="{{ route('todos.search') }}" method="GET">
@@ -11,7 +15,6 @@
     </form>
 </div>
 <h2>Todo一覧</h2>
-<a href="{{ route('todos.create') }}">新規作成</a>
 <ul>
     @foreach ($todos as $todo)
     <article class="todo-card">
@@ -33,4 +36,14 @@
     </article>
     @endforeach
 </ul>
+<nav>
+    @auth
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit">ログアウト</button>
+        </form>
+    @else
+        <a href="{{ route('login') }}">ログイン</a>
+    @endauth
+</nav>
 @endsection
