@@ -8,6 +8,14 @@
 </head>
 
 <body>
+    <!-- 検索欄 -->
+    <div>
+        <form action="{{ route('todos.search') }}" method="GET">
+            <input type="text" name="keyword">
+            <button type="submit">検索</button>
+        </form>
+    </div>
+
     <h1>{{ $title }}</h1>
     <h3>未完了</h3>
     <ul>
@@ -17,12 +25,12 @@
             {{ $todo->title }}
         </li>
         <div class="btn--layout">
-        <a href="{{ route('todos.edit', $todo) }}">編集</a>
-        <form class="delete__button" action="{{ route('todos.destroy', $todo) }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
-        </form>
+            <a href="{{ route('todos.edit', $todo) }}">編集</a>
+            <form class="delete__button" action="{{ route('todos.destroy', $todo) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
+            </form>
         </div>
         @endif
         @endforeach
