@@ -2,39 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Todo;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class TodoController extends Controller
 {
     public function index()
     {
-        $todos = [
-            (object) ['title' => 'Laravelを学ぶ'],
-            (object) ['title' => 'Bladeレイアウトを理解する'],
-        ];
+        $todos = Todo::with('category')
+            ->latest()
+            ->get();
 
         return view('todos.index', compact('todos'));
     }
 
     public function create()
     {
-        return view('todos.create');
+        $categories = Category::orderBy('name')->get();
+        return view('todos.create', compact('categories'));
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        Todo::create([
-            'title' => request('title'),
-            'body' => request('body'),
-            'is_done' => request('is_done')
+        $validated = $request->validate([
+            'category_id' => ['required', 'exists:categories,id'],
+            'title' => ['required', 'string', 'max:255'],
+            'body' => ['required', 'string']
         ]);
-        return redirect('/todos');
+
+        Todo::create($validated);
+
+        return redirect()
+            ->route('todos.index')
+            ->with('success', '投稿を作成しました。');
     }
 
     public function edit(Todo $todo)
     {
-        return view('todos.edit', compact('todo'));
+        $categories = Category::orderBy('name')->get();
+        return view('todos.edit', compact('todo', 'categories'));
     }
 
     public function update(Request $request, Todo $todo)

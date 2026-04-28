@@ -11,8 +11,8 @@ class Category extends Model
         'name',
     ];
 
-    public function posts(): HasMany
+    public function todos(): HasMany
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Todo::class);
     }
 }

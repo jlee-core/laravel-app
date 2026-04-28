@@ -14,3 +14,14 @@ h4 {
 .delete__button {
     padding-left: 8px;
 }
+
+.todo-card {
+  max-width: 300px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: 0.2s;
+}
