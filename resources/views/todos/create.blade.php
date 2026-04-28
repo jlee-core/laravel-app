@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Todo作成')
+@section('title', 'Todo作成ページ')
 
 @section('content')
     <h2>Todo作成</h2>
@@ -46,4 +46,5 @@
 
         <button type="submit">登録</button>
     </form>
+    <a href="{{ route('todos.index') }}">一覧へ戻る</a>
 @endsection
