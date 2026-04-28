@@ -1,12 +1,17 @@
-<!DOCTYPE html>
-<html lang="ja">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    @vite('resources/css/style.css')
-    <title>Todo一覧ページ</title>
-</head>
+@section('title', 'Todo一覧')
 
+@section('content')
+<h2>Todo一覧</h2>
+<a href="{{ route('todos.create') }}">新規作成</a>
+
+<ul>
+    @foreach ($todos as $todo)
+    <article class="todo-card">
+        <p>カテゴリ: {{ $todo->category->name }}</p>
+        <p>{{ $todo->title }}</p>
+        <p>{{ $todo->body }}</p>
 <body>
     <!-- 検索欄 -->
     <div>
@@ -15,38 +20,21 @@
             <button type="submit">検索</button>
         </form>
     </div>
-
-    <h1>{{ $title }}</h1>
-    <h3>未完了</h3>
     <ul>
         @foreach ($todos as $todo)
-        @if (!$todo->is_done)
-        <li>
-            {{ $todo->title }}
-        </li>
+        @if ($todo->is_done)
+        <p>状態: 完了</p>
+        @else
+        <p>状態: 未完了</p>
+        @endif
         <div class="btn--layout">
             <a href="{{ route('todos.edit', $todo) }}">編集</a>
-            <form class="delete__button" action="{{ route('todos.destroy', $todo) }}" method="POST">
-                @csrf
+            <form action="{{ route('todos.destroy', $todo) }}" method="POST" class="delete__button">
                 @method('DELETE')
                 <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
             </form>
         </div>
-        @endif
-        @endforeach
-    </ul>
-    <h3>完了</h3>
-    <ul>
-        @foreach ($todos as $todo)
-        @if ($todo->is_done)
-        <li>
-            {{ $todo->title }}
-        </li>
-        <a href="{{ route('todos.edit', $todo) }}">編集</a>
-        @endif
-        @endforeach
-    </ul>
-    <a href="{{ route('todos.create') }}">新規作成</a>
-</body>
-
-</html>
+    </article>
+    @endforeach
+</ul>
+@endsection

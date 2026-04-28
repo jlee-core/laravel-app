@@ -7,8 +7,26 @@
 </head>
 
 <body>
-    <h4>タスクを入力</h4>
+    <h4>Todoを編集</h4>
     <form action="{{ route('todos.update', $todo) }}" method="POST">
+
+        <div>
+            <label for="category_id">カテゴリ</label>
+
+            <select id="category_id" name="category_id">
+                @foreach ($categories as $category)
+                <option value="{{ $category->id }}"
+                    @selected(old('category_id', $todo->category_id ?? '') == $category->id)>
+                    {{ $category->name }}
+                </option>
+                @endforeach
+            </select>
+
+            @error('category_id')
+            <p>{{ $message }}</p>
+            @enderror
+        </div>
+
         @csrf
         @method('PUT')
 
