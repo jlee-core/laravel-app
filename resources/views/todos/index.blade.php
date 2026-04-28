@@ -1,44 +1,14 @@
-<!DOCTYPE html>
-<html lang="ja">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    @vite('resources/css/style.css')
-    <title>Todo一覧ページ</title>
-</head>
+@section('title', 'Todo一覧')
 
-<body>
-    <h1>{{ $title }}</h1>
-    <h3>未完了</h3>
-    <ul>
-        @foreach ($todos as $todo)
-        @if (!$todo->is_done)
-        <li>
-            {{ $todo->title }}
-        </li>
-        <div class="btn--layout">
-        <a href="{{ route('todos.edit', $todo) }}">編集</a>
-        <form class="delete__button" action="{{ route('todos.destroy', $todo) }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
-        </form>
-        </div>
-        @endif
-        @endforeach
-    </ul>
-    <h3>完了</h3>
-    <ul>
-        @foreach ($todos as $todo)
-        @if ($todo->is_done)
-        <li>
-            {{ $todo->title }}
-        </li>
-        <a href="{{ route('todos.edit', $todo) }}">編集</a>
-        @endif
-        @endforeach
-    </ul>
+@section('content')
+<h2>Todo一覧</h2>
     <a href="{{ route('todos.create') }}">新規作成</a>
-</body>
 
-</html>
+    <ul>
+        @foreach ($todos as $todo)
+            <li>{{ $todo->title }}</li>
+        @endforeach
+    </ul>
+@endsection

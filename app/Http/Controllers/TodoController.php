@@ -9,13 +9,12 @@ class TodoController extends Controller
 {
     public function index()
     {
-        $todos = Todo::all();
-        $title = 'Todo一覧';
-        return view(
-            'todos.index',
-            ['title' => $title],
-            compact('todos')
-        );
+        $todos = [
+            (object) ['title' => 'Laravelを学ぶ'],
+            (object) ['title' => 'Bladeレイアウトを理解する'],
+        ];
+
+        return view('todos.index', compact('todos'));
     }
 
     public function create()
