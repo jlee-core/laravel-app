@@ -68,4 +68,20 @@ class TodoController extends Controller
 
         return redirect()->route('todos.index');
     }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->input('keyword');
+        $sort = $request->sort ?? 'desc';
+
+        $todos = Todo::query()
+            ->where('is_done', 0)
+            ->orderby('created_at', $sort)
+            ->when($keyword, function ($query, $keyword) {
+                $query->where('title', 'like', "%{$keyword}%");
+            })
+            ->get();
+
+        return view('todos.search', compact('todos', 'keyword', 'sort'));
+    }
 }

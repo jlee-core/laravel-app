@@ -12,7 +12,16 @@
         <p>カテゴリ: {{ $todo->category->name }}</p>
         <p>{{ $todo->title }}</p>
         <p>{{ $todo->body }}</p>
-
+<body>
+    <!-- 検索欄 -->
+    <div>
+        <form action="{{ route('todos.search') }}" method="GET">
+            <input type="text" name="keyword">
+            <button type="submit">検索</button>
+        </form>
+    </div>
+    <ul>
+        @foreach ($todos as $todo)
         @if ($todo->is_done)
         <p>状態: 完了</p>
         @else

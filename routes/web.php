@@ -25,3 +25,7 @@ Route::put('todos/{todo}', [TodoController::class, 'update'])
 // データベースへ削除処理
 Route::delete('todos/{todo}', [TodoController::class, 'destroy'])
     ->name('todos.destroy');
+
+// 検索結果ページへ遷移
+Route::get('todos/search', [TodoController::class, 'search'])
+    ->name('todos.search');
