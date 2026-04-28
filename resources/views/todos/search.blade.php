@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <h3>未完了</h3>
+    <h3>検索結果</h3>
     <ul>
         @foreach ($todos as $todo)
         <li>{{ $todo->title }}</li>

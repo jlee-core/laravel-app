@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'ログイン')
+@section('title', 'ログインページ')
 
 @section('content')
     <h2>ログイン</h2>
