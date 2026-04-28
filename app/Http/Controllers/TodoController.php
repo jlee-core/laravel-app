@@ -2,40 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Todo;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class TodoController extends Controller
 {
     public function index()
     {
-        $todos = Todo::all();
-        $title = 'Todo一覧';
-        return view(
-            'todos.index',
-            ['title' => $title],
-            compact('todos')
-        );
+        $todos = Todo::with('category')
+            ->latest()
+            ->get();
+
+        return view('todos.index', compact('todos'));
     }
 
     public function create()
     {
-        return view('todos.create');
+        $categories = Category::orderBy('name')->get();
+        return view('todos.create', compact('categories'));
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        Todo::create([
-            'title' => request('title'),
-            'body' => request('body'),
-            'is_done' => request('is_done')
+        $validated = $request->validate([
+            'category_id' => ['required', 'exists:categories,id'],
+            'title' => ['required', 'string', 'max:255'],
+            'body' => ['required', 'string']
         ]);
-        return redirect('/todos');
+
+        Todo::create($validated);
+
+        return redirect()
+            ->route('todos.index')
+            ->with('success', '投稿を作成しました。');
     }
 
     public function edit(Todo $todo)
     {
-        return view('todos.edit', compact('todo'));
+        $categories = Category::orderBy('name')->get();
+        return view('todos.edit', compact('todo', 'categories'));
     }
 
     public function update(Request $request, Todo $todo)
@@ -60,5 +67,21 @@ class TodoController extends Controller
         $todo->delete();
 
         return redirect()->route('todos.index');
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->input('keyword');
+        $sort = $request->sort ?? 'desc';
+
+        $todos = Todo::query()
+            ->where('is_done', 0)
+            ->orderby('created_at', $sort)
+            ->when($keyword, function ($query, $keyword) {
+                $query->where('title', 'like', "%{$keyword}%");
+            })
+            ->get();
+
+        return view('todos.search', compact('todos', 'keyword', 'sort'));
     }
 }
