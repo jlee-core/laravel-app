@@ -6,9 +6,18 @@ use App\Models\Category;
 use App\Models\Todo;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Services\TodoService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class TodoController extends Controller
 {
+    private TodoService $todoService;
+
+    public function __construct(TodoService $todoService)
+    {
+        $this->todoService = $todoService;
+    }
+    
     public function index()
     {
         $todos = Todo::with('category')
@@ -26,17 +35,14 @@ class TodoController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'category_id' => ['required', 'exists:categories,id'],
-            'title' => ['required', 'string', 'max:255'],
-            'body' => ['required', 'string']
+        $request->validate([
+            'title' => 'required|max:255',
+            'attachment' => 'nullable|file|max:2048',
         ]);
 
-        Todo::create($validated);
+        $this->todoService->create($request->all(),$request->file('attachment'));
 
-        return redirect()
-            ->route('todos.index')
-            ->with('success', '投稿を作成しました。');
+        return redirect()->route('todos.index');
     }
 
     public function edit(Todo $todo)
