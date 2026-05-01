@@ -10,7 +10,6 @@ class TodoService
 {
     public function create(array $data, ?UploadedFile $attachment = null): Todo
     {
-        dd(Auth::id());
         $attachmentPath = null;
         if ($attachment) {
             $attachmentPath = $attachment->store('todos', 'public');
