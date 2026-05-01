@@ -11,7 +11,9 @@ class Todo extends Model
         'category_id',
         'title',
         'body',
+        'attachment_path',
         'is_done',
+        'user_id',
     ];
 
     public function category(): BelongsTo
